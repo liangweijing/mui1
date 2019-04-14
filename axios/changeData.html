@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>axios配置传参前后的修改</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+	<script>
+		var App={
+			template:
+				`
+				<div>
+                    <span>响应1：{{res1}}</span>
+                    <span>响应2：{{res2}}</span>
+					<button @click='sendAjax'>发请求</button>
+				</div>
+				`
+			,
+            data(){
+                return {
+                    res1:'',
+                    res2:''
+                }
+            },
+			methods:{
+				sendAjax(){
+                    // 设置默认URL
+                    this.$axios.defaults.baseURL='http://127.0.0.1:8888';
+                    var request1=this.$axios.get(''); //不写内容默认发baseURL
+                    var request2=this.$axios.post('add','a=1'); //代表请求127.0.0.1/add,参数是一个字符串
+                    this.$axios.all([request1,request2])   //并发调用
+                        .then(this.$axios.spread((res1,res2)=>{
+                            //并发请求的回调是spread，全部成功则执行
+                            this.res1=res1.data;
+                            this.res2=res2.data;
+                            
+                        }))
+                        .catch(err=>{
+                            //其一失败则执行
+                            console.log(err);
+                        })
+
+				}
+			}  
+		};
+		Vue.prototype.$axios=axios;
+		new Vue({
+			el:'#app',
+			template:'<App/>',
+			components:{App}
+		});
+        </script>
+</body>
+</html>

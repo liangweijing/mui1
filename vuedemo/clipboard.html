@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<style>
+    .el-tooltip__popper .popper__arrow, .el-tooltip__popper .popper__arrow::after {
+    position: absolute;
+    display: none;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+
+</style>
+</head>
+<body>
+        <div id="app">
+        <el-container>
+            <el-row>
+                <el-col span="24">
+                  <div class="special">
+                      <el-tooltip   content="Top center" placement="top" visible-arrow="false" enterbal>
+                          <div slot="content" >
+                              <el-button type="danger" size="mini" @click="copy">复制</el-button>
+                              <el-button type="primary" size="mini">下载</el-button>
+
+                          </div>
+                          <el-button>Dark</el-button>
+                        </el-tooltip>
+                        <el-tooltip content="Bottom center" placement="bottom" >
+                          <el-button>Light</el-button>
+                        </el-tooltip>
+                  </div>
+                       
+                </el-col>
+            </el-row>
+        </el-container>
+        </div>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+        <script>
+            
+                new Vue({
+                  el: '#app',
+                  data: function() {
+                    return { }
+                  }
+                  ,methods: {
+                      copy:function(){
+                          alert(111)
+                      }
+                  },
+                })
+              </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拦截器-请求之前</title>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+	<script>
+		var App={
+			template:
+				`
+				<div>
+					
+					<button @click = 'sendAjax'>发请求</button>
+				</div>
+				`
+			,
+            data(){
+                return {
+                 
+                }
+            },
+			methods:{
+				sendAjax(){
+                    // 添加请求拦截器
+                    axios.interceptors.request.use( (config)=>{
+                        // 在发送请求之前做些什么
+                        var token=localStorage.getItem("token")
+                        if(token){//设置一个请求头token值为token
+                            config.headers['token']=token; //config类似$axios.default
+                        }
+                        return config;
+                    }, function (error) {
+                        // 对请求错误做些什么
+                        return Promise.reject(error);
+                    });
+
+                    // 添加响应拦截器
+                    axios.interceptors.response.use( (response)=>{
+                        // 对响应数据做点什么
+                        if(response.data.token){//如果有值
+                            console.log(response.data.token);
+                            localStorage.setItem('token',response.data.token);
+                        }
+                        return response;
+                    }, function (error) {
+                        // 对响应错误做点什么
+                        return Promise.reject(error);
+                    });
+
+                    this.$axios.get('http://127.0.0.1:8888').then(res=>{
+                        console.log(res);
+                    }).catch(err=>{
+                        console.log(err);
+                    })
+
+				}
+			}  
+		};
+		Vue.prototype.$axios=axios;
+		new Vue({
+			el:'#app',
+			template:'<App/>',
+			components:{App}
+		});
+        </script>
+</body>
+</html>

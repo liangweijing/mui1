@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>axios</title>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <style>
+        .userlist{
+            border:1px solid pink;
+        }
+    </style>
+</head>
+<body>
+	<div id="app"></div>
+	<script>
+        Vue.component('my-con',{
+            // 不加key文本框中的内容不跟着顺序变，template中内容没有绑定成一个组
+            template:`
+                <div class='userlist'>
+                    <div class='content'>
+                    <h3>{{obj.name}}</h3>
+                    <p>{{obj.content}}</p>
+                    </div>
+                    <div class='control'>
+                        <input type='text' placeholder='请输入顺序 '>
+                    </div>
+                </div>
+            `,
+            // props:['list']可以写数组形式可以写对象
+            props:{
+                obj:Object  //会校验，若传过来的是数组字符串报错
+            }
+        });
+		var App={
+            data(){
+                return {
+                    datas:[
+                        {id:1,name:'张三',content:'我是张三'},
+                        {id:2,name:'李四',content:'我是李四'},
+                        {id:3,name:'王五',content:'我是王五'},
+                    ]
+                }
+            }
+            ,
+			template:`
+                <div>
+                    <button @click='changeOrder'>改变顺序</button>
+                    <my-con v-for='(item,index) in datas' :obj='item' :key='item.id'></my-con>
+                </div>
+            `,
+            methods: {
+                changeOrder(){
+                    this.datas=_.shuffle(this.datas);
+                }
+            },
+		};
+		
+		new Vue({
+			el:'#app',
+			template:'<App/>',
+			components:{App}
+		});
+	</script>
+</body>
+</html>
